@@ -47,6 +47,33 @@ namespace CrashCourse
             Console.WriteLine(@"This is a sample string\n\n"); // @ to not apply special characters such as '\n'
         }
 
+        static void stringBuilder()
+        {
+            StringBuilder string_1 = new StringBuilder("This is a stringbuilder text ");
+            StringBuilder string_2 = new StringBuilder("and is another stringbuilder text", 256);
+
+            Console.WriteLine(string_1.Capacity);
+            Console.WriteLine(string_1.Length);
+            Console.WriteLine(string_2.Capacity);
+            Console.WriteLine(string_2.Length);
+
+            string_1.AppendLine(string_2.ToString()); // Requires the argument to be a string and adds a newline at the end
+            string_1.Append(string_2); // Works the same as AppendLine except it does not add a newline at the end
+            Console.WriteLine(string_1);
+
+            CultureInfo enUS = CultureInfo.CreateSpecificCulture("en-US");
+            string customer = "Celeste Diane";
+
+            string_2.Clear(); // Clears the string
+            string_2.Insert(0, "x is a new customer in Dunkin Donuts"); // At the specified index, insert this value
+            string_2.AppendFormat(enUS, " buying her favourite coffee");
+            string_2.Replace("x", customer);
+
+            Console.WriteLine(string_2);
+            string_2.Remove(48, 28);
+            Console.WriteLine(string_2);
+        }
+
         static void arrays()
         {
             // SINGLE DIMENSION ARRAYS -----------------------------------------------------------------------
@@ -154,7 +181,7 @@ namespace CrashCourse
             }
         }
 
-        static void ternary_operator()
+        static void ternaryOperator()
         {
             int age = 16;
             string is_legal_age;
@@ -166,33 +193,6 @@ namespace CrashCourse
             Console.WriteLine("Is age below 18? " + is_below_18);
         }
 
-        static void string_builder()
-        {
-            StringBuilder string_1 = new StringBuilder("This is a stringbuilder text ");
-            StringBuilder string_2 = new StringBuilder("and is another stringbuilder text", 256);
-
-            Console.WriteLine(string_1.Capacity);
-            Console.WriteLine(string_1.Length);
-            Console.WriteLine(string_2.Capacity);
-            Console.WriteLine(string_2.Length);
-
-            string_1.AppendLine(string_2.ToString()); // Requires the argument to be a string and adds a newline at the end
-            string_1.Append(string_2); // Works the same as AppendLine except it does not add a newline at the end
-            Console.WriteLine(string_1);
-
-            CultureInfo enUS = CultureInfo.CreateSpecificCulture("en-US");
-            string customer = "Celeste Diane";
-
-            string_2.Clear(); // Clears the string
-            string_2.Insert(0, "x is a new customer in Dunkin Donuts"); // At the specified index, insert this value
-            string_2.AppendFormat(enUS, " buying her favourite coffee");
-            string_2.Replace("x", customer);
-
-            Console.WriteLine(string_2);
-            string_2.Remove(48, 28);
-            Console.WriteLine(string_2);
-        }
-
         // -------------------------------------------------------------------------
         // Unlike in C++, passing by reference requires you to use the keyword 'ref' and not the ampersand
         void swap(ref int var_1, ref int var_2)
@@ -201,7 +201,7 @@ namespace CrashCourse
             var_1 = var_2;
             var_2 = temporary_var;
         }
-        static void swap_by_reference()
+        static void swapByReference()
         {
             Program program = new Program();
             int var_1 = 5;
@@ -216,7 +216,7 @@ namespace CrashCourse
 
         // Using params keyword allows you to add as much arguments as you want in the function call
         // and these params will be put inside the int[] array
-        static void add_multiple_params(params int[] numbers)
+        static void addMultipleParams(params int[] numbers)
         {
             int sum = 0;
             for (int i = 0; i < numbers.Length; i++)
@@ -232,7 +232,7 @@ namespace CrashCourse
         {
             Console.WriteLine($"Josh lives in {City} with a Zip code of {ZipCode}");
         }
-        static void call_parameters_unordered()
+        static void callParamsUnordered()
         {
             Program program = new Program();
 
@@ -240,8 +240,50 @@ namespace CrashCourse
         }
         // -------------------------------------------------------------------------
 
+        static void dateTime()
+        {
+            DateTime celesteBirthday = new DateTime(1999, 5, 10, 8, 30, 45); // 5/10/1999, 8:30:45 AM
+            // Create date with order: Year, Month, Day, Hour, Minute, Seconds arguments
+            // You can create with only Year, Month, Day arguments
+            // Or you can add milliseconds by adding another argument after 'Seconds' argument
+            // EXTRA: Calendar objects can be included along with DateTimeKind (e.g. UTC+8, etc.,)
+
+            Console.WriteLine("----------\n");
+            Console.WriteLine(celesteBirthday); // Outputs the date along with the set time
+            Console.WriteLine(celesteBirthday.Date); // Outputs the date with time at 12:00:00 AM (Very start of the day)
+            Console.WriteLine(celesteBirthday.Year); // Outputs the year
+            Console.WriteLine(celesteBirthday.Month); // Outputs the numerical month
+            Console.WriteLine(celesteBirthday.Day); // Outputs the numerical day of the month
+            Console.WriteLine(celesteBirthday.DayOfWeek); // Outputs the day of the week (Monday, Tuesday, etc.,)
+            Console.WriteLine(celesteBirthday.DayOfYear); // Outputs the numerical day of the year
+            Console.WriteLine(celesteBirthday.TimeOfDay); // Outputs the set time of the day
+            Console.WriteLine("----------\n");
+
+            celesteBirthday = celesteBirthday.AddYears(4);
+            celesteBirthday = celesteBirthday.AddMonths(2);
+            celesteBirthday = celesteBirthday.AddDays(10);
+            // You can also do... AddHours, AddMinutes, AddSeconds, AddMilliseconds
+            Console.WriteLine(celesteBirthday.Date + "\n----------\n");
+
+            // USE OF TimeSpan CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            TimeSpan time = new TimeSpan(12, 30, 0);
+            Console.WriteLine("Default" + time);
+
+            time = time.Subtract(new TimeSpan(0, 30, 0));
+            Console.WriteLine("Subtract 30 mins: " + time);
+
+            time = time.Add(new TimeSpan(1, 0, 0));
+            Console.WriteLine("Add 1 hour: " + time);
+
+            if (time.Equals(new TimeSpan(13, 0, 0)))
+            {
+                Console.WriteLine("Equal to 1:00:00 PM");
+            }
+        }
+
         static void Main(string[] args)
         {
+
         }
     }
 }
