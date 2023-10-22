@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,14 +13,21 @@ namespace CrashCourse
 {
     internal class Program
     {
-        static void numberManipulation()
+        static void consoleMethods()
+        {
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.BackgroundColor = ConsoleColor.White;
+            Console.Clear();
+        }
+
+        static void numberFormatting()
         {
             Console.WriteLine("Currency : {0:c}", 23.455); // TURN TO CURRENCY 2 DECIMALS
             Console.WriteLine("Currency : {0:d2}", 23); // ADD 0's TO THE FRONT d(x)
             Console.WriteLine("Currency : {0:f2}", 23.455); // ROUND TO DECIMAL PLACES f(x)
             Console.WriteLine("Currency : {0:n2}", 230000.657456); // ADD COMMAS AND ROUND TO DECIMAL PLACES n(x)
         }
-
+        
         static void stringFuncitons()
         {
             string sample_string = "This is a sample string";
@@ -74,9 +84,59 @@ namespace CrashCourse
             Console.WriteLine(string_2);
         }
 
+        static void ternaryOperator()
+        {
+            int age = 16;
+            string is_legal_age;
+
+            is_legal_age = age > 18 ? "True" : "False"; // Resulting values must be assigned to a variable
+            bool is_below_18 = age < 18 ? true : false; // Can be used directly on variable intialization
+
+            Console.WriteLine("Is age above 18? " + is_legal_age);
+            Console.WriteLine("Is age below 18? " + is_below_18);
+        }
+
+        static void foreachLoop()
+        {
+            int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+            // var can be explicitly the proper datatype (e.g. int, string, float, etc.,)
+            foreach (var element in numbers)
+            {
+                Console.WriteLine(element);
+            }
+        }
+
+        static void exceptionHandling()
+        {
+            int var_1 = 5;
+            int var_2 = 0;
+
+            try
+            {
+                Console.WriteLine(var_1 / var_2);
+            }
+            catch (DivideByZeroException exception)
+            {
+                // exception argument stores the system error thrown
+                Console.WriteLine("Can't divide by zero");
+                Console.WriteLine($"{exception.GetType().Name}\n{exception.Message}");
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine("Error occured on calculation");
+                Console.WriteLine($"{exception.GetType().Name}\n{exception.Message}");
+            }
+            finally
+            {
+                // Will always trigger whether try is successful or catch is triggered
+                Console.WriteLine("Cleaning up...");
+            }
+        }
+
         static void arrays()
         {
-            // SINGLE DIMENSION ARRAYS -----------------------------------------------------------------------
+            // SINGLE DIMENSION ARRAYS //
 
             int[] my_array = new int[3]; // Declared similar to C++ dynamic arrays
             my_array[0] = 10;
@@ -94,7 +154,7 @@ namespace CrashCourse
             my_array.SetValue(50, 4);
 
             Console.WriteLine($"New my_array length: {my_array.Length}");
-            Console.WriteLine($"Index of the first 40 in my_array: {Array.IndexOf(my_array,40)}");
+            Console.WriteLine($"Index of the first 40 in my_array: {Array.IndexOf(my_array, 40)}");
 
             int first_element = Array.Find(my_array, p => p > 20); // Finding a value greater than 25 and assigning it to the variable 'first_element'
             Console.WriteLine($"Value greater than 25 in my_array: {first_element}"); // Finding a value greater than 25 with the use of lambda expression
@@ -130,7 +190,7 @@ namespace CrashCourse
                 Console.Write(element + " ");
             }
 
-            // MULTIDIMENSIONAL ARRAYS ----------------------------------------------------------------------
+            // MULTIDIMENSIONAL ARRAYS //
 
             int[,] my_multi_array = new int[3, 3]; // A 3x3 multidimensional array
             int[,] my_multi_array_2 = { { 1, 2, 3 }, { 4, 5, 6 }, { 7, 8, 9 } }; // To declare and initialize
@@ -144,7 +204,7 @@ namespace CrashCourse
                 }
             }
 
-            // JAGGED ARRAYS -------------------------------------------------------------------------------
+            // JAGGED ARRAYS //
 
             int[][] my_jagged_array = new int[3][];
             int[][] my_jagged_array_2 = { new int[] { 1, 2, 3 }, new int[] { 4, 5, 6, 7 }, new int[] { 8, 9, 10, 11, 12 } };
@@ -181,27 +241,31 @@ namespace CrashCourse
             }
         }
 
-        static void ternaryOperator()
+        static void addMultipleParams(params int[] numbers)
         {
-            int age = 16;
-            string is_legal_age;
+            // Using params keyword allows you to add as much arguments as you want in the function call
+            // and these params will be put inside the int[] array
+            // A function can only contain one params parameter, and must be placed as the rightmost or last parameter
 
-            is_legal_age = age > 18 ? "True" : "False"; // Resulting values must be assigned to a variable
-            bool is_below_18 = age < 18 ? true : false; // Can be used directly on variable intialization
-
-            Console.WriteLine("Is age above 18? " + is_legal_age);
-            Console.WriteLine("Is age below 18? " + is_below_18);
+            int sum = 0;
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                sum += numbers[i];
+            }
+            Console.WriteLine($"Sum of all numbers: {sum}");
         }
 
-        // -------------------------------------------------------------------------
-        // Unlike in C++, passing by reference requires you to use the keyword 'ref' and not the ampersand
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REF PARAMETER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         void swap(ref int var_1, ref int var_2)
         {
+            // Unlike in C++, passing by reference requires you to use the keyword 'ref' and not the ampersand
+
             int temporary_var = var_1;
             var_1 = var_2;
             var_2 = temporary_var;
         }
-        static void swapByReference()
+        
+        static void passByReference()
         {
             Program program = new Program();
             int var_1 = 5;
@@ -212,33 +276,49 @@ namespace CrashCourse
 
             Console.WriteLine($"After swap:\nVar_1: {var_1}\nVar_2: {var_2}");
         }
-        // -------------------------------------------------------------------------
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< END <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
-        // Using params keyword allows you to add as much arguments as you want in the function call
-        // and these params will be put inside the int[] array
-        static void addMultipleParams(params int[] numbers)
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> OUT PARAMETER >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        void calculateSum(out int sum, params int[] numbers)
         {
-            int sum = 0;
+            // Out parameter behaves similar to changing a ref parameter - however, this out parameter must
+            // always have a value assigned to it within the function, or else it would not work
+
+            sum = 0; // Best to assign a default value at start of function
+            // Giving an out parameter a default value is not allowed and will throw an error
+
             for (int i = 0; i < numbers.Length; i++)
             {
                 sum += numbers[i];
             }
-            Console.WriteLine($"Sum of all numbers: {sum}");
         }
 
-        // -------------------------------------------------------------------------
-        // Arguments can be passed not in order as long as parameter names are set on function call
+        static void outParameter()
+        {
+            Program program = new Program();
+            int sum = 0;
+
+            // Calling a function with an out parameter requires you to add the keyword 'out' before the argument
+            program.calculateSum(out sum, 5, 10, 15, 20, 25);
+
+            Console.WriteLine(sum);
+        }
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< END <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNORDERED PARAMETERS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         void createAddress(string City, int ZipCode)
         {
             Console.WriteLine($"Josh lives in {City} with a Zip code of {ZipCode}");
         }
+
         static void callParamsUnordered()
         {
             Program program = new Program();
 
+            // Arguments can be passed not in order as long as parameter names are set on function call
             program.createAddress(ZipCode: 69420, City: "Metro Manila");
         }
-        // -------------------------------------------------------------------------
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< END <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
         static void dateTime()
         {
@@ -265,7 +345,7 @@ namespace CrashCourse
             // You can also do... AddHours, AddMinutes, AddSeconds, AddMilliseconds
             Console.WriteLine(celesteBirthday.Date + "\n----------\n");
 
-            // USE OF TimeSpan CLASS <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+            // USE OF TimeSpan CLASS
             TimeSpan time = new TimeSpan(12, 30, 0);
             Console.WriteLine("Default" + time);
 
@@ -281,9 +361,68 @@ namespace CrashCourse
             }
         }
 
+        static void randomizer()
+        {
+            Random random = new Random();
+            int number;
+            while (true)
+            {
+                number = random.Next(1, 11); // Generates a number from 1 to 10
+                Console.WriteLine(number);
+                Console.ReadKey();
+                Console.Clear();
+            }
+        }
+
+        // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ENUMS >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+        enum Difficulty : int // You can set the type of enum with any numerical datatype (e.g. int, short, long, etc.,)
+        {
+            Peaceful = 1, // Default starting index is 0 unless assigned, proceeding values will be adjusted (incremented) accordingly
+            Easy, // Will be 2
+            Normal, // If this is set to 5 (Normal = 5), preceeding indices will remain unchanged, but succeeding indices are adjusted
+            Hard, // Will be 6 if Normal was set to 5, else this would be 4 as Normal would have its supposed index of 3
+            Extreme // Same with the previous member, this would be 7, else it would be 5
+        }
+
+        static void setDifficulty()
+        {
+            Difficulty selectedDifficulty = Difficulty.Normal;
+            string input;
+
+            Console.WriteLine("Choose difficulty:\n- Peaceful\n- Easy\n- Normal\n- Hard\n- Extreme");
+            input = Console.ReadLine();
+
+            foreach (string element in Enum.GetNames(typeof(Difficulty)))
+            {
+                if (String.Equals(element, input, StringComparison.OrdinalIgnoreCase))
+                {
+                    selectedDifficulty = (Difficulty)Enum.Parse(typeof(Difficulty), input, true);
+                }
+            }
+            // Enum members can be displayed as its name by calling the enum class name itself
+            // To show the number code of the enum member, cast the enum with numerical datatype such as int: (int)enum_name
+            // To show the member name by using its number code, cast the number by the enum class name: (enum_name)x
+            // where 'x' is any integer or number value
+            Console.WriteLine("{0} difficulty with {1} multiplier selected", selectedDifficulty, (int)selectedDifficulty);
+        }
+        // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< END <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+
         static void Main(string[] args)
         {
+            //setDifficulty();
+            utilityClass.createLine();
+        }
+    }
 
+    class utilityClass
+    {
+        public static void createLine(char symbol = '-', int length = 25)
+        {
+            int[] output = new int[length];
+        }
+        public static void createLine(string symbol, int length = 25)
+        {
+            
         }
     }
 }
